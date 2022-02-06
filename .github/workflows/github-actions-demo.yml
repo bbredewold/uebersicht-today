@@ -1,0 +1,16 @@
+name: GitHub Actions Demo
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 Zipping job automatically triggered by a ${{ github.event_name }} event."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - uses: papeloto/action-zip@v1
+        with:
+          files: today.jsx today.sh
+          dest: today.widget.zip
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+

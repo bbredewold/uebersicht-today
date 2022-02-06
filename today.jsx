@@ -26,7 +26,7 @@ export const className = {
 
 const parseIcalBuddyOutput = input => {
         // Regex for parsing icalbuddy's output.
-        const regex = /• (.*?)\n    (.*?)\n(?:    (attendees:.*?)\n)?(?:    (notes:.*?)\n)?/gm;
+        const regex = /• (.*?)\n    (.*?)\n(?:    (attendees:.*?)\n)?(?:    (location:.*?)\n)?(?:    (notes:.*?)\n)?/gm;
     
         // Match all
         const matches = input.matchAll(regex);
@@ -34,28 +34,39 @@ const parseIcalBuddyOutput = input => {
         // Array for the processed events.
         const events = [];
     
+        // Construct a nice array
         for (const match of matches) {
             events.push({
                 title: match[1],
                 datetime: match[2],
                 attendees: match[3],
-                notes: match[4],
-                url: parseMeetingUrlFromNotes(match[4])
+                location: parseLocation(match[4]),
+                notes: match[5],
+                url: parseMeetingUrlFromNotes(match[5])
             })
         }
 
+        // Map to JSX objects
         return events.map((event, index) => (
             <div key={index}>
-                {event.url} {event.title} ▶ {event.datetime}
+                {event.url} {event.title} {event.location} ▶ {event.datetime}
             </div>
         ));
 };
 
 const parseMeetingUrlFromNotes = notes => {
-    const regex = /https:\/\/(?:zoom\.us|meet\.google\.com|teams.microsoft.com)\/.*? /;
-    const matchResult = notes.match(regex);
-    if (matchResult) {
-       return <a style={{textDecoration: 'none'}} href={matchResult}>📞</a>;
+    if (notes) {
+        const regex = /https:\/\/(?:zoom\.us|meet\.google\.com|teams.microsoft.com)\/.*? /;
+        const matchResult = notes.match(regex);
+        if (matchResult) {
+           return <a style={{textDecoration: 'none'}} href={matchResult}>🤙🏼</a>;
+        }
+    }
+};
+
+const parseLocation = location => {
+    if (location) {
+        return '(' + location.split('location: ')[1] + ')';
     }
 };
 
