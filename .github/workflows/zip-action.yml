@@ -1,16 +1,19 @@
-name: GitHub Actions Demo
+name: Zip Action for Widget
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Zip-Widget:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 Zipping job automatically triggered by a ${{ github.event_name }} event."
+
       - name: Check out repository code
         uses: actions/checkout@v2
-      - uses: papeloto/action-zip@v1
+
+      - run: zip today.widget.zip today.jsx today.sh
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          files: today.jsx today.sh
-          dest: today.widget.zip
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          commit_message: Updating widget zipfile
 
 
