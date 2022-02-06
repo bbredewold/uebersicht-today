@@ -11,7 +11,7 @@
 export const command = 'today.widget/today.sh';
 
 // Refresh every X miliseconds
-export const refreshFrequency = 3000;
+export const refreshFrequency = 30000;
 
 // Base layout
 export const className = {
